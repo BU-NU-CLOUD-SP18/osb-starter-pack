@@ -21,10 +21,10 @@ func TestBrokerLogic(t *testing.T){
 	// credentials blank
 	_, errProvisionBlank := businessLogic.Provision(
 		&osb.ProvisionRequest{
-			InstanceID:	"dataverse-1",
+			InstanceID:	"harvard-ephelps",
 			AcceptsIncomplete:	false,
-			ServiceID:	"dataverse-1",
-			PlanID:	"dataverse-1-default",
+			ServiceID:	"harvard-ephelps",
+			PlanID:	"harvard-ephelps-default",
 			OrganizationGUID:	"bdc",
 			SpaceGUID:	"bdc",
 			Parameters:	map[string]interface{}{},
@@ -39,10 +39,10 @@ func TestBrokerLogic(t *testing.T){
 	// improper credentials
 	_, errProvisionImproper := businessLogic.Provision(
 		&osb.ProvisionRequest{
-			InstanceID:	"ephelps",
+			InstanceID:	"harvard-ephelps",
 			AcceptsIncomplete:	false,
-			ServiceID:	"ephelps",
-			PlanID:	"ephelps-default",
+			ServiceID:	"harvard-ephelps",
+			PlanID:	"harvard-ephelps-default",
 			OrganizationGUID:	"bdc",
 			SpaceGUID:	"bdc",
 			Parameters:	map[string]interface{}{
@@ -61,10 +61,10 @@ func TestBrokerLogic(t *testing.T){
 	// proper credentials
 	_, err = businessLogic.Provision(
 		&osb.ProvisionRequest{
-			InstanceID:	"ephelps",
+			InstanceID:	"harvard-ephelps",
 			AcceptsIncomplete:	false,
-			ServiceID:	"ephelps",
-			PlanID:	"ephelps-default",
+			ServiceID:	"harvard-ephelps",
+			PlanID:	"harvard-ephelps-default",
 			OrganizationGUID:	"bdc",
 			SpaceGUID:	"bdc",
 			Parameters:	map[string]interface{}{
@@ -84,11 +84,11 @@ func TestBrokerLogic(t *testing.T){
 	// credentials blank
 	_, errBindBlank := businessLogic.Bind(
 		&osb.BindRequest{
-			BindingID:	"dataverse-1",
-			InstanceID:	"dataverse-1",
+			BindingID:	"harvard-ephelps",
+			InstanceID:	"harvard-ephelps",
 			AcceptsIncomplete:	false,
-			ServiceID:	"dataverse-1",
-			PlanID:	"dataverse-1-default",
+			ServiceID:	"harvard-ephelps",
+			PlanID:	"harvard-ephelps-default",
 			Parameters:	map[string]interface{}{},
 		}, 
 		&broker.RequestContext{})
@@ -101,11 +101,11 @@ func TestBrokerLogic(t *testing.T){
 	// credentials nonblank
 	bindResultProper, err := businessLogic.Bind(
 		&osb.BindRequest{
-			BindingID:	"ephelps",
-			InstanceID: "ephelps",
+			BindingID:	"harvard-ephelps",
+			InstanceID:	"harvard-ephelps",
 			AcceptsIncomplete:	false,
-			ServiceID:	"ephelps",
-			PlanID:	"ephelps-default",
+			ServiceID:	"harvard-ephelps",
+			PlanID:	"harvard-ephelps-default",
 			Parameters:	map[string]interface{}{
 				"credentials": "totally-real-token",
 			},
