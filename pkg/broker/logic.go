@@ -199,7 +199,7 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 	}
 
 	// this should probably run asynchronously if possible
-	if exampleInstance.Params["credentials"].(string) != "" {
+	if exampleInstance.Params["credentials"] != nil && exampleInstance.Params["credentials"].(string) != "" {
 		// check that the token is valid, make a call to the Dataverse server
 		// make a GET request
 		
@@ -285,12 +285,17 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 		}
 	}
 
+	credentials := ""
+	if instance.Params["credentials"] != nil {
+			credentials = instance.Params["credentials"].(string)
+	}
+
 	response := broker.BindResponse{
 		BindResponse: osb.BindResponse{
 			// Get the service URL based on the serviceID (which is funny because they're the same thing right now...)
 			Credentials: map[string]interface{}{
 				"coordinates": b.dataverses[instance.ServiceID].Url,
-				"credentials": instance.Params["credentials"].(string),
+				"credentials": credentials,
 				},
 		},
 
