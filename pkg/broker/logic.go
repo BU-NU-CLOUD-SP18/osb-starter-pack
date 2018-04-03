@@ -223,11 +223,11 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 			}
 		}
 
-		response := DataverseResponseWrapper{}
-		err = json.Unmarshal(body, &response)
+		dataverseResp := DataverseResponseWrapper{}
+		err = json.Unmarshal(body, &dataverseResp)
 
 		// failed GET means token is invalid (what to do?)
-		if err != nil || response.Status != "OK"{
+		if err != nil || dataverseResp.Status != "OK"{
 			description := "Bad api key '" + exampleInstance.Params["credentials"].(string) + "'"
 			return nil, osb.HTTPStatusCodeError{
 				StatusCode: http.StatusBadRequest,
