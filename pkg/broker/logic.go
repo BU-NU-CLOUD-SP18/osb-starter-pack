@@ -453,9 +453,9 @@ type DataverseDescription struct{
 	Name string `json:"name"`
 	Type string `json:"type"`
 	Url string `json:"url"`
-	Image_url string `json:"image_url"`
+	Image_url string `json:"image_url,omitempty"`
 	Identifier string `json:"identifier"`
-	Description string `json:"description"`
+	Description string `json:"description,omitempty"`
 	Published_at string `json:"published_at"`
 
 	// Fields for datasets
