@@ -1,6 +1,9 @@
 package broker
 
 import (
+
+	"net/http"
+
 	"github.com/golang/glog"
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 
@@ -96,9 +99,10 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 		if err != nil {
 			return nil, err
 		} else if succ != true {
+			description := "Could not reach server"
 			return nil, osb.HTTPStatusCodeError{
 				StatusCode: http.StatusBadRequest,
-				Description: "Could not reach server",
+				Description: &description,
 			}
 		}
 

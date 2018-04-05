@@ -153,14 +153,14 @@ func ServiceToFile(instances []*dataverseInstance, path string) (bool, error) {
 		jsonInstance, err := json.Marshal(instance)
 
 		if err != nil{
-			return nil, err
+			return false, err
 		}
 
 		// write to file
 		err = ioutil.WriteFile(path+instance.ServiceID, jsonInstance, 0777)
 
 		if err != nil {
-			return nil, err
+			return false, err
 		}
 
 	}
@@ -270,7 +270,7 @@ func TestDataverseToken(serverUrl string, token string) (bool, error) {
 	resp, err := http.Get(serverUrl + "/api/dataverses/:root?key=" + token)
 
 	if err != nil{
-		return nil, osb.HTTPStatusCodeError{
+		return false, osb.HTTPStatusCodeError{
 			StatusCode: http.StatusNotFound,
 		}
 	}
@@ -282,7 +282,7 @@ func TestDataverseToken(serverUrl string, token string) (bool, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil{
-		return nil, osb.HTTPStatusCodeError{
+		return false, osb.HTTPStatusCodeError{
 			StatusCode: http.StatusNotFound,
 		}
 	}
@@ -291,9 +291,9 @@ func TestDataverseToken(serverUrl string, token string) (bool, error) {
 	err = json.Unmarshal(body, &dataverseResp)
 
 	if err != nil || dataverseResp.Status != "OK"{
-		return nil, osb.HTTPStatusCodeError{
+		return false, osb.HTTPStatusCodeError{
 			StatusCode: http.StatusBadRequest,
-			Description: dataverseResp.Message,
+			Description: &dataverseResp.Message,
 		}
 	}
 
