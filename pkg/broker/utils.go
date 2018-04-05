@@ -107,6 +107,10 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 
 	succ, err := ServiceToFile(serviceSlice, "./")
 
+	if err != nil || succ != true {
+		panic(err)
+	}
+
 	return services
 }
 
