@@ -11,7 +11,8 @@ import(
 
 func TestBrokerLogic(t *testing.T){
 	// create a BusinessLogic struct instance (tests dataverse functions)
-	businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
+	//businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
+	_, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
 
 	if errCreate != nil{
 		t.Errorf("Error on BusinessLogic creation: %#+v", errCreate)
