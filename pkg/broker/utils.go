@@ -99,7 +99,7 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 			ServiceID: server_alias + "-" +dataverse.Identifier,
 			PlanID: server_alias + "-" +dataverse.Identifier + "-default",
 			ServerName: server_alias,
-			ServerUrl target_dataverse,
+			ServerUrl: target_dataverse,
 			Description: dataverse,
 		}
 		serviceSlice[i] = services[server_alias + "-" +dataverse.Identifier]
@@ -116,7 +116,7 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 
 	files, err := ioutil.ReadDir(path)
 
-	if err := nil {
+	if err != nil {
 		glog.Error(err)
 	}
 

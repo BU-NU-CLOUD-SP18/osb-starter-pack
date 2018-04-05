@@ -1,10 +1,6 @@
 package broker
 
 import (
-	"sync"
-	"encoding/json"
-	"fmt"
-
 	"github.com/golang/glog"
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 

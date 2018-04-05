@@ -1,5 +1,9 @@
 package broker
 
+import (
+	"sync"
+)
+
 // BusinessLogic provides an implementation of the broker.BusinessLogic
 // interface.
 type BusinessLogic struct {
