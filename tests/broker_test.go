@@ -19,6 +19,7 @@ func TestBrokerLogic(t *testing.T){
 
 	// Run Provision on a couple of test cases:
 	// credentials blank
+	/*
 	_, errProvisionBlank := businessLogic.Provision(
 		&osb.ProvisionRequest{
 			InstanceID:	"harvard-ephelps",
@@ -56,6 +57,7 @@ func TestBrokerLogic(t *testing.T){
 	if errProvisionImproper == nil {
 		t.Errorf("Error on Provision with invalid token: no error returned")
 	}
+	*/
 
 	/*
 	// proper credentials
