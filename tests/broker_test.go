@@ -18,7 +18,7 @@ func TestBrokerLogic(t *testing.T){
 	}
 
 	// add some instances to buisnessLogic
-	buisnessLogic.dataverses["test-service"] = &logic.dataverseInstance{
+	businessLogic.dataverses["test-service"] = &logic.dataverseInstance{
 		ID:        "demo-test-service",
 		ServiceID: "demo-test-service",
 		PlanID:    "demo-test-service-default",
