@@ -17,15 +17,25 @@ func TestBrokerLogic(t *testing.T){
 		t.Errorf("Error on BusinessLogic creation: %#+v", errCreate)
 	}
 
+	// add some instances to buisnessLogic
+	buisnessLogic.dataverses["test-service"] = &logic.dataverseInstance{
+		ID:        "demo-test-service",
+		ServiceID: "demo-test-service",
+		PlanID:    "demo-test-service-default",
+		ServerName: "demo",
+		ServerUrl: "https://demo.dataverse.org",
+		Description: &logic.DataverseDescription{},
+	}
+
 	// Run Provision on a couple of test cases:
 	// credentials blank
-	/*
+	
 	_, errProvisionBlank := businessLogic.Provision(
 		&osb.ProvisionRequest{
-			InstanceID:	"harvard-ephelps",
+			InstanceID:	"test1",
 			AcceptsIncomplete:	false,
-			ServiceID:	"harvard-ephelps",
-			PlanID:	"harvard-ephelps-default",
+			ServiceID:	"demo-test-service",
+			PlanID:	"demo-test-service-default",
 			OrganizationGUID:	"bdc",
 			SpaceGUID:	"bdc",
 			Parameters:	map[string]interface{}{},
@@ -40,10 +50,10 @@ func TestBrokerLogic(t *testing.T){
 	// improper credentials
 	_, errProvisionImproper := businessLogic.Provision(
 		&osb.ProvisionRequest{
-			InstanceID:	"harvard-ephelps",
+			InstanceID:	"test2",
 			AcceptsIncomplete:	false,
-			ServiceID:	"harvard-ephelps",
-			PlanID:	"harvard-ephelps-default",
+			ServiceID:	"demo-test-service",
+			PlanID:	"demo-test-service-default",
 			OrganizationGUID:	"bdc",
 			SpaceGUID:	"bdc",
 			Parameters:	map[string]interface{}{
@@ -57,7 +67,7 @@ func TestBrokerLogic(t *testing.T){
 	if errProvisionImproper == nil {
 		t.Errorf("Error on Provision with invalid token: no error returned")
 	}
-	*/
+	
 
 	/*
 	// proper credentials
