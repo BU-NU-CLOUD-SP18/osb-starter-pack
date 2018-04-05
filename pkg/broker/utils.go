@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"fmt"
 	"strings"
-	"os"
 
 	"github.com/golang/glog"
 
