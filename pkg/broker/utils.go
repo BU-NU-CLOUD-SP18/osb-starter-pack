@@ -119,7 +119,7 @@ func FileToService() ([]*dataverseInstance, error) {
 	// take a file and turn it into dataverseInstances
 	// each file stores a JSON/YAML object for a whitelisted dataverse service
 
-	files, err := ioutil.ReadDir(os.Getenv("OPENSHIFT_DATA_DIR") + "whitelist/")
+	files, err := ioutil.ReadDir("/etc/config/whitelist/")
 
 	if err != nil {
 		glog.Error(err)
@@ -161,8 +161,9 @@ func ServiceToFile(instances []*dataverseInstance) (bool, error) {
 			return false, err
 		}
 
+
 		// write to file
-		err = ioutil.WriteFile(os.Getenv("OPENSHIFT_DATA_DIR")+"whitelist/"+instance.ServiceID+".json", jsonInstance, 0777)
+		err = ioutil.WriteFile("/etc/config/whitelist/"+instance.ServiceID+".json", jsonInstance, 0777)
 
 		if err != nil {
 			return false, err
