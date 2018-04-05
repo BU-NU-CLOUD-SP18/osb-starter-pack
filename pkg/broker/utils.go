@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"fmt"
 	"strings"
+	"os"
 
 	"github.com/golang/glog"
 
@@ -105,7 +106,7 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 		serviceSlice[i] = services[server_alias + "-" +dataverse.Identifier]
 	}
 
-	succ, err := ServiceToFile(serviceSlice, "./")
+	succ, err := ServiceToFile(serviceSlice)
 
 	if err != nil || succ != true {
 		panic(err)
@@ -114,11 +115,11 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 	return services
 }
 
-func FileToService(path string) ([]*dataverseInstance, error) {
+func FileToService() ([]*dataverseInstance, error) {
 	// take a file and turn it into dataverseInstances
 	// each file stores a JSON/YAML object for a whitelisted dataverse service
 
-	files, err := ioutil.ReadDir(path)
+	files, err := ioutil.ReadDir(os.Getenv("OPENSHIFT_DATA_DIR") + "whitelist/")
 
 	if err != nil {
 		glog.Error(err)
@@ -147,7 +148,7 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 
 }
 
-func ServiceToFile(instances []*dataverseInstance, path string) (bool, error) {
+func ServiceToFile(instances []*dataverseInstance) (bool, error) {
 	// take a list of services and store as JSON/YAML objects in files
 	// save as a list of files in path
 
@@ -161,7 +162,7 @@ func ServiceToFile(instances []*dataverseInstance, path string) (bool, error) {
 		}
 
 		// write to file
-		err = ioutil.WriteFile(path+instance.ServiceID+".json", jsonInstance, 0777)
+		err = ioutil.WriteFile(os.Getenv("OPENSHIFT_DATA_DIR")+"whitelist/"+instance.ServiceID+".json", jsonInstance, 0777)
 
 		if err != nil {
 			return false, err
