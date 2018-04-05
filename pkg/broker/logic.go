@@ -99,8 +99,7 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 
 		if err != nil {
 			return nil, err
-		}
-		else if ! succ {
+		} else if succ != true {
 			return nil, osb.HTTPStatusCodeError{
 				StatusCode: http.StatusBadRequest,
 				Description: "Could not reach server",
