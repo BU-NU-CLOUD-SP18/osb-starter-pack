@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/golang/glog"
+
 	osb "github.com/pmorie/go-open-service-broker-client/v2"
 )
 
-func DataverseToService(dataverses map[string]*DataverseDescription, server_name string) ([]osb.Service, error) {
+func DataverseToService(dataverses map[string]*dataverseInstance) ([]osb.Service, error) {
 	// Use DataverseDescription to populate osb.Service objects
 
 	services := make([]osb.Service, len(dataverses))
@@ -22,11 +24,11 @@ func DataverseToService(dataverses map[string]*DataverseDescription, server_name
 		// use fields in DataverseDescription to populate osb.Service fields
 
 		// check that each field has a value
-		service_dashname := strings.ToLower(strings.Replace(dataverse.Name, " ", "-", -1))
-		service_id := server_name + "-" + dataverse.Identifier
-		service_description := dataverse.Description
-		service_name := dataverse.Name
-		service_image_url := dataverse.Image_url
+		service_dashname := strings.ToLower(strings.Replace(dataverse.Description.Name, " ", "-", -1))
+		service_id := dataverse.ServiceID
+		service_description := dataverse.Description.Description
+		service_name := dataverse.Description.Name
+		service_image_url := dataverse.Description.Image_url
 
 		if service_description == ""{
 			service_description = "A Dataverse service"
@@ -80,7 +82,7 @@ func DataverseToService(dataverses map[string]*DataverseDescription, server_name
 }
 
 // Add option to take in whitelist config
-func GetDataverseServices(target_dataverse string, server_alias string) (map[string]*DataverseDescription) {
+func GetDataverseInstances(target_dataverse string, server_alias string) (map[string]*dataverseInstance) {
 
 	dataverses, err := SearchForDataverses(&target_dataverse, 3)
 
@@ -88,13 +90,82 @@ func GetDataverseServices(target_dataverse string, server_alias string) (map[str
 		panic(err)
 	}
 	
-	services := make(map[string]*DataverseDescription, len(dataverses))
+	services := make(map[string]*dataverseInstance, len(dataverses))
+	serviceSlice := make([]*dataverseInstance, len(services))
 
-	for _, dataverse := range dataverses {
-		services[ server_alias + "-" +dataverse.Identifier] = dataverse
+	for i, dataverse := range dataverses {
+		services[ server_alias + "-" +dataverse.Identifier] = &dataverseInstance{
+			ID: server_alias + "-" +dataverse.Identifier,
+			ServiceID: server_alias + "-" +dataverse.Identifier,
+			PlanID: server_alias + "-" +dataverse.Identifier + "-default",
+			ServerName: server_alias,
+			ServerUrl target_dataverse,
+			Description: dataverse,
+		}
+		serviceSlice[i] = services[server_alias + "-" +dataverse.Identifier]
 	}
 
+	succ, err := ServiceToFile(serviceSlice, "./")
+
 	return services
+}
+
+func FileToService(path string) ([]*dataverseInstance, error) {
+	// take a file and turn it into dataverseInstances
+	// each file stores a JSON/YAML object for a whitelisted dataverse service
+
+	files, err := ioutil.ReadDir(path)
+
+	if err := nil {
+		glog.Error(err)
+	}
+
+	instances := make([]*dataverseInstance, len(files))
+
+	for i, f := range files {
+		// read each file
+		text, err := ioutil.ReadFile(f.Name())
+
+		if err != nil{
+			return nil, err
+		}
+
+		//Unmarshal string into dataverseInstance object
+		err = json.Unmarshal(text, instances[i])
+
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	return instances, nil
+
+}
+
+func ServiceToFile(instances []*dataverseInstance, path string) (bool, error) {
+	// take a list of services and store as JSON/YAML objects in files
+	// save as a list of files in path
+
+	for _, instance := range instances {
+
+		// get JSON from instance
+		jsonInstance, err := json.Marshal(instance)
+
+		if err != nil{
+			return nil, err
+		}
+
+		// write to file
+		err = ioutil.WriteFile(path+instance.ServiceID, jsonInstance, 0777)
+
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	return true, nil
 }
 
 // get all dataverses within a Dataverse server
@@ -192,4 +263,40 @@ func SearchForDataverses(base *string, max_results_opt ... int) ([]*DataverseDes
 	
 	return dataverses, nil
 	
+}
+
+func TestDataverseToken(serverUrl string, token string) (bool, error) {
+	// ping the url, return bool for success or failure, and error code on fail
+	resp, err := http.Get(serverUrl + "/api/dataverses/:root?key=" + token)
+
+	if err != nil{
+		return nil, osb.HTTPStatusCodeError{
+			StatusCode: http.StatusNotFound,
+		}
+	}
+
+	// Must close response when finished
+	defer resp.Body.Close()
+
+	//convert resp into a DataverseResponse object
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil{
+		return nil, osb.HTTPStatusCodeError{
+			StatusCode: http.StatusNotFound,
+		}
+	}
+
+	dataverseResp := DataverseResponseWrapper{}
+	err = json.Unmarshal(body, &dataverseResp)
+
+	if err != nil || dataverseResp.Status != "OK"{
+		return nil, osb.HTTPStatusCodeError{
+			StatusCode: http.StatusBadRequest,
+			Description: dataverseResp.Message,
+		}
+	}
+
+	// reaching here means successful ping
+	return true, nil
 }

@@ -21,11 +21,9 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// BusinessLogic here.
 	return &BusinessLogic{
 		async:     o.Async,
-		instances: make(map[string]*dataverseService, 10),
-		dataverse_server: "harvard",
-		dataverse_url: "https://dataverse.harvard.edu",
+		instances: make(map[string]*dataverseInstance, 10),
 		// call dataverse server as little as possible
-		dataverses: GetDataverseServices("https://dataverse.harvard.edu", "harvard"),
+		dataverses: GetDataverseInstances("https://dataverse.harvard.edu", "harvard"),
 	}, nil
 }
 
@@ -42,7 +40,7 @@ func (b *BusinessLogic) GetCatalog(c *broker.RequestContext) (*broker.CatalogRes
 	response := &broker.CatalogResponse{}
 
 	// Create Service objects from dataverses
-	services, err :=  DataverseToService(b.dataverses, b.dataverse_server)
+	services, err :=  DataverseToService(b.dataverses)
 
 	if err != nil {
 		panic(err)
@@ -69,16 +67,19 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 
 	response := broker.ProvisionResponse{}
 
-	dataverseService := &dataverseService{
+	dataverseInstance := &dataverseInstance{
 		ID:        request.InstanceID,
 		ServiceID: request.ServiceID,
 		PlanID:    request.PlanID,
+		ServerName: b.dataverses[request.ServiceID].ServerName,
+		ServerUrl: b.dataverses[request.ServiceID].ServerUrl,
+		Description: b.dataverses[request.ServiceID].Description,
 		Params:    request.Parameters,
 	}
 
 	// Check to see if this is the same instance
 	if i := b.instances[request.InstanceID]; i != nil {
-		if i.Match(dataverseService) {
+		if i.Match(dataverseInstance) {
 			response.Exists = true
 			return &response, nil
 		} else {
@@ -92,46 +93,24 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 	}
 
 	// this should probably run asynchronously if possible
-	if dataverseService.Params["credentials"] != nil && dataverseService.Params["credentials"].(string) != "" {
+	if dataverseInstance.Params["credentials"] != nil && dataverseInstance.Params["credentials"].(string) != "" {
 		// check that the token is valid, make a call to the Dataverse server
-		// make a GET request
-		
-		resp, err := http.Get(b.dataverse_url + "/api/dataverses/:root?key=" + dataverseService.Params["credentials"].(string))
+		succ, err := TestDataverseToken(dataverseInstance.ServerUrl, dataverseInstance.Params["credentials"].(string))
 
-		if err != nil{
-			return nil, osb.HTTPStatusCodeError{
-				StatusCode: http.StatusNotFound,
-			}
+		if err != nil {
+			return nil, err
 		}
-
-		// Must close response when finished
-		defer resp.Body.Close()
-
-		//convert resp into a DataverseResponse object
-		body, err := ioutil.ReadAll(resp.Body)
-
-		if err != nil{
-			return nil, osb.HTTPStatusCodeError{
-				StatusCode: http.StatusNotFound,
-			}
-		}
-
-		dataverseResp := DataverseResponseWrapper{}
-		err = json.Unmarshal(body, &dataverseResp)
-
-		// failed GET means token is invalid (what to do?)
-		if err != nil || dataverseResp.Status != "OK"{
-			description := "Bad api key '" + dataverseService.Params["credentials"].(string) + "'"
+		else if ! succ {
 			return nil, osb.HTTPStatusCodeError{
 				StatusCode: http.StatusBadRequest,
-				Description: &description,
+				Description: "Could not reach server",
 			}
 		}
 
 	}
 	
   
-	b.instances[request.InstanceID] = dataverseService
+	b.instances[request.InstanceID] = dataverseInstance
 
 	if request.AcceptsIncomplete {
 		response.Async = b.async
@@ -185,9 +164,8 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 
 	response := broker.BindResponse{
 		BindResponse: osb.BindResponse{
-			// Get the service URL based on the serviceID (which is funny because they're the same thing right now...)
 			Credentials: map[string]interface{}{
-				"coordinates": b.dataverses[instance.ServiceID].Url,
+				"coordinates": instance.Description.Url,
 				"credentials": credentials,
 				},
 		},
@@ -219,6 +197,6 @@ func (b *BusinessLogic) ValidateBrokerAPIVersion(version string) error {
 	return nil
 }
 
-func (i *dataverseService) Match(other *dataverseService) bool {
+func (i *dataverseInstance) Match(other *dataverseInstance) bool {
 	return reflect.DeepEqual(i, other)
 }

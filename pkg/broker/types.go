@@ -8,21 +8,19 @@ type BusinessLogic struct {
 	// Synchronize go routines.
 	sync.RWMutex
 	// Add fields here! These fields are provided purely as an example
-	instances map[string]*dataverseService
-
-	// name of the dataverse server
-	dataverse_server string
-	// url to dataverse server
-	dataverse_url string
-	// dataverse map dataverse_id to *DataverseDescription
-	dataverses map[string]*DataverseDescription
+	instances map[string]*dataverseInstance
+	// dataverse map dataverse_id to *dataverseInstances
+	dataverses map[string]*dataverseInstance
 }
 
-// dataverseService holds information about a dataverse service instance
-type dataverseService struct {
+// dataverseInstance holds information about a dataverse service instance
+type dataverseInstance struct {
 	ID        string
 	ServiceID string
 	PlanID    string
+	Description *DataverseDescription
+	ServerName string
+	ServerUrl string
 	Params    map[string]interface{} // Maybe add the DataverseDescription to this?
 }
 
@@ -83,4 +81,5 @@ type DataverseResponseWrapper struct{
 
 	Data *DataverseResponse `json:"data"`
 	Status string `json:"status"`
+	Message string `json:"message,omitempty"`
 }
