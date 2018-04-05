@@ -36,7 +36,7 @@ deploy-helm: image ## Deploys image with helm
 
 deploy-openshift: image ## Deploys image to openshift
 	oc get project dataverse-broker || oc new-project dataverse-broker
-	oc create configmap whitelist-config --from-file=manifests/subtree-whitelist/ -p IMAGE=$(IMAGE):$(TAG) -p APPLICATION_NAME=dataverse-broker
+	oc create configmap whitelist-config --from-file=manifests/subtree-whitelist/
 	oc process -f openshift/dataverse-broker.yaml -p IMAGE=$(IMAGE):$(TAG) | oc apply -f -
 
 create-ns: ## Cleans up the namespaces
