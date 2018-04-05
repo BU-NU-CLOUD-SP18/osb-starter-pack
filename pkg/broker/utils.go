@@ -91,7 +91,7 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 	}
 	
 	services := make(map[string]*dataverseInstance, len(dataverses))
-	serviceSlice := make([]*dataverseInstance, len(services))
+	serviceSlice := make([]*dataverseInstance, len(dataverses))
 
 	for i, dataverse := range dataverses {
 		services[ server_alias + "-" +dataverse.Identifier] = &dataverseInstance{
