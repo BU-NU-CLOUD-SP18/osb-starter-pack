@@ -117,6 +117,7 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 
 	if err != nil {
 		glog.Error(err)
+		return nil, err
 	}
 
 	instances := make([]*dataverseInstance, len(files))
