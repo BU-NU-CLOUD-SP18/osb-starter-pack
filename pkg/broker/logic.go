@@ -19,6 +19,8 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// For example, if your BusinessLogic requires a parameter from the command
 	// line, you would unpack it from the Options and set it on the
 	// BusinessLogic here.
+
+	// This is not ideal, create an environment variable for this path?
 	dataverseInstances, err := FileToService(filepath.Join(os.Getenv("GOPATH"), "/src/github.com/SamiSousa/dataverse-broker/whitelist/"))
 
 	if err != nil {

@@ -3,25 +3,23 @@ package broker
 
 import(
 	"testing"
-	//"reflect"
 
-	//"github.com/pmorie/osb-broker-lib/pkg/broker"
-	//osb "github.com/pmorie/go-open-service-broker-client/v2"
+	"github.com/pmorie/osb-broker-lib/pkg/broker"
+	osb "github.com/pmorie/go-open-service-broker-client/v2"
 	logic "github.com/SamiSousa/dataverse-broker/pkg/broker"
 )
 
 func TestBrokerLogic(t *testing.T){
 	// create a BusinessLogic struct instance (tests dataverse functions)
-	//businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
-	_, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
+	businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
 
 	if errCreate != nil{
 		t.Errorf("Error on BusinessLogic creation: %#+v", errCreate)
 	}
 
-	/*
+	
 	// add some instances to buisnessLogic
-	businessLogic.dataverses["test-service"] = &logic.dataverseInstance{
+	businessLogic.dataverses["demo-test-service"] = &logic.dataverseInstance{
 		ID:        "demo-test-service",
 		ServiceID: "demo-test-service",
 		PlanID:    "demo-test-service-default",
@@ -50,6 +48,7 @@ func TestBrokerLogic(t *testing.T){
 		t.Errorf("Error on Provision with blank token: %#+v", errProvisionBlank)
 	}
 
+	/*
 	// improper credentials
 	_, errProvisionImproper := businessLogic.Provision(
 		&osb.ProvisionRequest{
