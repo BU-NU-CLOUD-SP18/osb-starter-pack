@@ -4,8 +4,8 @@ package broker
 import(
 	"testing"
 
-	//"github.com/pmorie/osb-broker-lib/pkg/broker"
-	//osb "github.com/pmorie/go-open-service-broker-client/v2"
+	"github.com/pmorie/osb-broker-lib/pkg/broker"
+	osb "github.com/pmorie/go-open-service-broker-client/v2"
 	logic "github.com/SamiSousa/dataverse-broker/pkg/broker"
 )
 
@@ -144,14 +144,14 @@ func TestBrokerLogic(t *testing.T){
 func TestUtils(t *testing.T) {
 
 	server_alias := "demo"
-	server_url := "https://demo.dataverse.org"
+	target_dataverse := "https://demo.dataverse.org"
 
-	dataverses := GetDataverseInstances(server_url, server_alias)
+	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
 
 	serviceSlice := make([]*dataverseInstance, len(dataverses))
 
 	for i, dataverse := range dataverses {
-		servicesSlice[i] = &dataverseInstance{
+		serviceSlice[i] = &dataverseInstance{
 			ID: server_alias + "-" +dataverse.Identifier,
 			ServiceID: server_alias + "-" +dataverse.Identifier,
 			PlanID: server_alias + "-" +dataverse.Identifier + "-default",
@@ -161,16 +161,27 @@ func TestUtils(t *testing.T) {
 		}
 	}
 
-	succ, err := ServiceToFile(serviceSlice)
+	succ, err := logic.ServiceToFile(serviceSlice)
 
 	if err != nil || succ != true {
 		t.Errorf("Error writing json to files: %#+v\n", err)
 	}
 
-	_, err := FileToService()
+	_, err := logic.FileToService()
 
 	if err != nil {
 		t.Errorf("Error creating files: %#+v\n", err)
 	}
 
+}
+
+// dataverseInstance holds information about a dataverse service instance
+type dataverseInstance struct {
+	ID        string
+	ServiceID string
+	PlanID    string
+	Description *logic.DataverseDescription
+	ServerName string
+	ServerUrl string
+	Params    map[string]interface{} // Maybe add the DataverseDescription to this?
 }
