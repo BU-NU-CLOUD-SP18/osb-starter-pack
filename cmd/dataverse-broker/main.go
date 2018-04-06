@@ -63,7 +63,7 @@ func runWithContext(ctx context.Context) error {
 	addr := ":" + strconv.Itoa(options.Port)
 
 	// set CatalogPath
-	options.Options.CatalogPath = "/opt/dataverse-broker/whitelist/")
+	options.Options.CatalogPath = "/opt/dataverse-broker/whitelist/"
 
 	businessLogic, err := broker.NewBusinessLogic(options.Options)
 	if err != nil {
