@@ -158,7 +158,7 @@ func TestUtils(t *testing.T) {
 		
 	}
 	
-	_, err = logic.FileToService()
+	_, err := logic.FileToService()
 
 	if err != nil {
 		t.Errorf("Error creating files: %#+v\n", err)
