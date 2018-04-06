@@ -17,7 +17,7 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// For example, if your BusinessLogic requires a parameter from the command
 	// line, you would unpack it from the Options and set it on the
 	// BusinessLogic here.
-	dataverseInstances, err := FileToService("./whitelist/")
+	dataverseInstances, err := FileToService("$GOPATH/src/github.com/SamiSousa/dataverse-broker/whitelist/")
 
 	if err != nil {
 		return nil, err
