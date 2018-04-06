@@ -3,9 +3,7 @@ package broker
 import (
 
 	"net/http"
-	"os"
-	"path/filepath"
-
+	
 	"github.com/golang/glog"
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 
