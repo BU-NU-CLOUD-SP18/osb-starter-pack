@@ -113,6 +113,14 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 	// take a file and turn it into dataverseInstances
 	// each file stores a JSON/YAML object for a whitelisted dataverse service
 
+	dir, err := os.Getwd()
+
+	if err != nil{
+		return nil, err
+	}
+
+	fmt.Printf("%s\n", dir)
+
 	files, err := ioutil.ReadDir(path)
 
 	if err != nil {
