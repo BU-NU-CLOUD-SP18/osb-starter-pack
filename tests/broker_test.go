@@ -149,16 +149,20 @@ func TestUtils(t *testing.T) {
 
 	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
 
+	serviceSlice := nil
+
 	for _, dataverse := range dataverses {
-		serviceSlice := make([]*reflect.TypeOf(dataverse).Elem(), len(dataverses))
+		serviceSlice := append(serviceSlice, dataverse)
 		break
 	}
 
+	/*
 	i := 0
 	for _, dataverse := range dataverses {
 		serviceSlice[i] = dataverse
 		i += 1
 	}
+	*/
 
 	succ, err := logic.ServiceToFile(serviceSlice)
 
