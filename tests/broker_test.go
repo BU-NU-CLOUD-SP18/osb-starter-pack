@@ -84,14 +84,14 @@ func TestBrokerLogic(t *testing.T){
 
 	// Run Bind on a couple of test cases
 	// credentials blank
-	/*
+	
 	_, errBindBlank := businessLogic.Bind(
 		&osb.BindRequest{
-			BindingID:	"harvard-ephelps",
-			InstanceID:	"harvard-ephelps",
+			BindingID:	"test-binding1",
+			InstanceID:	"test1",
 			AcceptsIncomplete:	false,
-			ServiceID:	"harvard-ephelps",
-			PlanID:	"harvard-ephelps-default",
+			ServiceID:	"demo-test",
+			PlanID:	"demo-test-default",
 			Parameters:	map[string]interface{}{},
 		}, 
 		&broker.RequestContext{})
@@ -99,8 +99,6 @@ func TestBrokerLogic(t *testing.T){
 	if errBindBlank != nil{
 		t.Errorf("Error on Bind with no token: %#+v", errBindBlank)
 	}
-	*/
-
 	
 	/*
 	// credentials nonblank
