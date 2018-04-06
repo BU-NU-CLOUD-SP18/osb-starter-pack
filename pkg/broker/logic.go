@@ -8,7 +8,6 @@ import (
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 
 	osb "github.com/pmorie/go-open-service-broker-client/v2"
-	"reflect"
 )
 
 // NewBusinessLogic is a hook that is called with the Options the program is run
@@ -27,12 +26,6 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 }
 
 var _ broker.Interface = &BusinessLogic{}
-
-
-func truePtr() *bool {
-	b := true
-	return &b
-}
 
 func (b *BusinessLogic) GetCatalog(c *broker.RequestContext) (*broker.CatalogResponse, error) {
 	// Your catalog business logic goes here
@@ -190,12 +183,4 @@ func (b *BusinessLogic) Update(request *osb.UpdateInstanceRequest, c *broker.Req
 	}
 
 	return &response, nil
-}
-
-func (b *BusinessLogic) ValidateBrokerAPIVersion(version string) error {
-	return nil
-}
-
-func (i *dataverseInstance) Match(other *dataverseInstance) bool {
-	return reflect.DeepEqual(i, other)
 }

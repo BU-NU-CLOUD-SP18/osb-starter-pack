@@ -140,3 +140,37 @@ func TestBrokerLogic(t *testing.T){
 	*/
 
 }
+
+func TestUtils(t *testing.T) {
+
+	server_alias := "demo"
+	server_url := "https://demo.dataverse.org"
+
+	dataverses := GetDataverseInstances(server_url, server_alias)
+
+	serviceSlice := make([]*dataverseInstance, len(dataverses))
+
+	for i, dataverse := range dataverses {
+		servicesSlice[i] = &dataverseInstance{
+			ID: server_alias + "-" +dataverse.Identifier,
+			ServiceID: server_alias + "-" +dataverse.Identifier,
+			PlanID: server_alias + "-" +dataverse.Identifier + "-default",
+			ServerName: server_alias,
+			ServerUrl: target_dataverse,
+			Description: dataverse,
+		}
+	}
+
+	succ, err := ServiceToFile(serviceSlice)
+
+	if err != nil || succ != true {
+		t.Errorf("Error writing json to files: %#+v\n", err)
+	}
+
+	_, err := FileToService()
+
+	if err != nil {
+		t.Errorf("Error creating files: %#+v\n", err)
+	}
+
+}

@@ -7,10 +7,13 @@ import (
 	"strconv"
 	"fmt"
 	"strings"
+	"os"
+	"reflect"
 
 	"github.com/golang/glog"
 
 	osb "github.com/pmorie/go-open-service-broker-client/v2"
+
 )
 
 func DataverseToService(dataverses map[string]*dataverseInstance) ([]osb.Service, error) {
@@ -84,16 +87,15 @@ func DataverseToService(dataverses map[string]*dataverseInstance) ([]osb.Service
 // Add option to take in whitelist config
 func GetDataverseInstances(target_dataverse string, server_alias string) (map[string]*dataverseInstance) {
 
-	dataverses, err := SearchForDataverses(&target_dataverse, 3)
+	dataverses, err := SearchForDataverses(&target_dataverse, 10)
 
 	if err != nil{
 		panic(err)
 	}
 	
 	services := make(map[string]*dataverseInstance, len(dataverses))
-	serviceSlice := make([]*dataverseInstance, len(dataverses))
 
-	for i, dataverse := range dataverses {
+	for _, dataverse := range dataverses {
 		services[ server_alias + "-" +dataverse.Identifier] = &dataverseInstance{
 			ID: server_alias + "-" +dataverse.Identifier,
 			ServiceID: server_alias + "-" +dataverse.Identifier,
@@ -102,13 +104,6 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 			ServerUrl: target_dataverse,
 			Description: dataverse,
 		}
-		serviceSlice[i] = services[server_alias + "-" +dataverse.Identifier]
-	}
-
-	succ, err := ServiceToFile(serviceSlice)
-
-	if err != nil || succ != true {
-		panic(err)
 	}
 
 	return services
@@ -118,7 +113,9 @@ func FileToService() ([]*dataverseInstance, error) {
 	// take a file and turn it into dataverseInstances
 	// each file stores a JSON/YAML object for a whitelisted dataverse service
 
-	files, err := ioutil.ReadDir("/etc/config/whitelist/")
+	path := "./whitelist/"
+
+	files, err := ioutil.ReadDir(path)
 
 	if err != nil {
 		glog.Error(err)
@@ -128,18 +125,21 @@ func FileToService() ([]*dataverseInstance, error) {
 
 	for i, f := range files {
 		// read each file
-		text, err := ioutil.ReadFile(f.Name())
+		text, err := ioutil.ReadFile(path + f.Name())
 
 		if err != nil{
 			return nil, err
 		}
 
 		//Unmarshal string into dataverseInstance object
-		err = json.Unmarshal(text, instances[i])
+		dataverse := &dataverseInstance{}
+		err = json.Unmarshal(text, dataverse)
 
 		if err != nil {
 			return nil, err
 		}
+
+		instances[i] = dataverse
 
 	}
 
@@ -150,6 +150,14 @@ func FileToService() ([]*dataverseInstance, error) {
 func ServiceToFile(instances []*dataverseInstance) (bool, error) {
 	// take a list of services and store as JSON/YAML objects in files
 	// save as a list of files in path
+
+	path := "./whitelist/"
+
+	err := os.MkdirAll(path, os.ModePerm)
+
+	if err != nil{
+		return false, err
+	}
 
 	for _, instance := range instances {
 
@@ -162,7 +170,7 @@ func ServiceToFile(instances []*dataverseInstance) (bool, error) {
 
 
 		// write to file
-		err = ioutil.WriteFile("/etc/config/whitelist/"+instance.ServiceID+".json", jsonInstance, 0777)
+		err = ioutil.WriteFile(path+instance.ServiceID+".json", jsonInstance, 0777)
 
 		if err != nil {
 			return false, err
@@ -304,4 +312,17 @@ func TestDataverseToken(serverUrl string, token string) (bool, error) {
 
 	// reaching here means successful ping
 	return true, nil
+}
+
+func truePtr() *bool {
+	b := true
+	return &b
+}
+
+func (b *BusinessLogic) ValidateBrokerAPIVersion(version string) error {
+	return nil
+}
+
+func (i *dataverseInstance) Match(other *dataverseInstance) bool {
+	return reflect.DeepEqual(i, other)
 }
