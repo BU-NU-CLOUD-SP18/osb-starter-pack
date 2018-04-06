@@ -3,6 +3,7 @@ package broker
 import (
 
 	"net/http"
+	"os"
 
 	"github.com/golang/glog"
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
@@ -17,7 +18,7 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// For example, if your BusinessLogic requires a parameter from the command
 	// line, you would unpack it from the Options and set it on the
 	// BusinessLogic here.
-	dataverseInstances, err := FileToService("$GOPATH/src/github.com/SamiSousa/dataverse-broker/whitelist/")
+	dataverseInstances, err := FileToService(os.Getenv("GOPATH").(string) + "/src/github.com/SamiSousa/dataverse-broker/whitelist/")
 
 	if err != nil {
 		return nil, err
