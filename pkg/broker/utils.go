@@ -147,9 +147,9 @@ func FileToService() ([]*dataverseInstance, error) {
 
 }
 
-func ServiceToFile(instances []*dataverseInstance) (bool, error) {
-	// take a list of services and store as JSON/YAML objects in files
-	// save as a list of files in path
+func ServiceToFile(instance *dataverseInstance) (bool, error) {
+	// take a service and store as JSON/YAML object in file
+	// save as a file in path
 
 	path := "./whitelist/"
 
@@ -159,23 +159,19 @@ func ServiceToFile(instances []*dataverseInstance) (bool, error) {
 		return false, err
 	}
 
-	for _, instance := range instances {
+	// get JSON from instance
+	jsonInstance, err := json.Marshal(instance)
 
-		// get JSON from instance
-		jsonInstance, err := json.Marshal(instance)
-
-		if err != nil{
-			return false, err
-		}
+	if err != nil{
+		return false, err
+	}
 
 
-		// write to file
-		err = ioutil.WriteFile(path+instance.ServiceID+".json", jsonInstance, 0777)
+	// write to file
+	err = ioutil.WriteFile(path+instance.ServiceID+".json", jsonInstance, 0777)
 
-		if err != nil {
-			return false, err
-		}
-
+	if err != nil {
+		return false, err
 	}
 
 	return true, nil

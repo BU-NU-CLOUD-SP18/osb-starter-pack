@@ -3,7 +3,7 @@ package broker
 
 import(
 	"testing"
-	"reflect"
+	//"reflect"
 
 	//"github.com/pmorie/osb-broker-lib/pkg/broker"
 	//osb "github.com/pmorie/go-open-service-broker-client/v2"
@@ -149,27 +149,15 @@ func TestUtils(t *testing.T) {
 
 	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
 
-	serviceSlice := nil
-
 	for _, dataverse := range dataverses {
-		serviceSlice := append(serviceSlice, dataverse)
-		break
+		succ, err := logic.ServiceToFile(dataverse)
+
+		if err != nil || succ != true {
+			t.Errorf("Error writing json to files: %#+v\n", err)
+		}
+		
 	}
-
-	/*
-	i := 0
-	for _, dataverse := range dataverses {
-		serviceSlice[i] = dataverse
-		i += 1
-	}
-	*/
-
-	succ, err := logic.ServiceToFile(serviceSlice)
-
-	if err != nil || succ != true {
-		t.Errorf("Error writing json to files: %#+v\n", err)
-	}
-
+	
 	_, err = logic.FileToService()
 
 	if err != nil {
