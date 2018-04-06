@@ -3,7 +3,7 @@ package broker
 import (
 
 	"net/http"
-	
+
 	"github.com/golang/glog"
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 
@@ -71,6 +71,8 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 	b.Lock()
 	defer b.Unlock()
 
+	glog.Infof("provision request: %#+v", request)
+
 	response := broker.ProvisionResponse{}
 
 	dataverseInstance := &dataverseInstance{
@@ -122,6 +124,8 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 		response.Async = b.async
 	}
 
+	glog.Infof("provision response: %#+v", response)
+
 	return &response, nil
 }
 
@@ -155,6 +159,8 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 	// example implementation:
 	b.Lock()
 	defer b.Unlock()
+	
+	glog.Infof("bind request: %#+v", request)
 
 	instance, ok := b.instances[request.InstanceID]
 	if !ok {
@@ -180,6 +186,8 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 	if request.AcceptsIncomplete {
 		response.Async = b.async
 	}
+
+	glog.Infof("bind response: %#+v", response)
 
 	return &response, nil
 }
