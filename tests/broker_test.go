@@ -149,7 +149,7 @@ func TestUtils(t *testing.T) {
 
 	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
 
-	serviceSlice := make(reflect.ValueOf(dataverses).Elem(), len(dataverses))
+	serviceSlice := make(reflect.ValueOf(dataverses).Type(), len(dataverses))
 
 	i := 0
 	for _, dataverse := range dataverses {
