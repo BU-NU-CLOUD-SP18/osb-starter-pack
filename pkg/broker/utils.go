@@ -176,7 +176,7 @@ func ServiceToFile(instance *dataverseInstance, path string) (bool, error) {
 
 
 	// write to file
-	err = ioutil.WriteFile(filepath.path(path,instance.ServiceID+".json"), jsonInstance, 0777)
+	err = ioutil.WriteFile(filepath.Join(path,instance.ServiceID+".json"), jsonInstance, 0777)
 
 	if err != nil {
 		return false, err
