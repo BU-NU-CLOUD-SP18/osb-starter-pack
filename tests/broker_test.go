@@ -3,6 +3,8 @@ package broker
 
 import(
 	"testing"
+	"os"
+	"path/filepath"
 
 	"github.com/pmorie/osb-broker-lib/pkg/broker"
 	osb "github.com/pmorie/go-open-service-broker-client/v2"
@@ -11,7 +13,7 @@ import(
 
 func TestBrokerLogic(t *testing.T){
 	// create a BusinessLogic struct instance (tests dataverse functions)
-	businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: "", Async: false})
+	businessLogic, errCreate := logic.NewBusinessLogic(logic.Options{CatalogPath: filepath.Join(os.Getenv("GOPATH"), "/src/github.com/SamiSousa/dataverse-broker/whitelist/"), Async: false})
 
 	if errCreate != nil{
 		t.Errorf("Error on BusinessLogic creation: %#+v", errCreate)
