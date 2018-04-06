@@ -147,10 +147,12 @@ func TestUtils(t *testing.T) {
 	server_alias := "demo"
 	target_dataverse := "https://demo.dataverse.org"
 
+	whitelistPath := "./test/"
+
 	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
 
 	for _, dataverse := range dataverses {
-		succ, err := logic.ServiceToFile(dataverse)
+		succ, err := logic.ServiceToFile(dataverse, whitelistPath)
 
 		if err != nil || succ != true {
 			t.Errorf("Error writing json to files: %#+v\n", err)
@@ -158,7 +160,7 @@ func TestUtils(t *testing.T) {
 		
 	}
 	
-	_, err := logic.FileToService()
+	_, err := logic.FileToService(whitelistPath)
 
 	if err != nil {
 		t.Errorf("Error creating files: %#+v\n", err)

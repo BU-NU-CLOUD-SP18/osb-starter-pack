@@ -17,11 +17,23 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// For example, if your BusinessLogic requires a parameter from the command
 	// line, you would unpack it from the Options and set it on the
 	// BusinessLogic here.
+	dataverseInstances, err := FileToService("./whitelist/")
+
+	if err != nil {
+		return nil, err
+	}
+
+	dataverseMap := make(map[string]*dataverseInstance, len(dataverseInstances))
+
+	for _, dataverse := range dataverseInstances {
+		dataverseMap[dataverse.ID] = dataverse
+	}
+
 	return &BusinessLogic{
 		async:     o.Async,
 		instances: make(map[string]*dataverseInstance, 10),
 		// call dataverse server as little as possible
-		dataverses: GetDataverseInstances("https://dataverse.harvard.edu", "harvard"),
+		dataverses: dataverseMap,
 	}, nil
 }
 

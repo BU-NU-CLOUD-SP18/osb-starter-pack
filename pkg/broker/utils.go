@@ -109,11 +109,9 @@ func GetDataverseInstances(target_dataverse string, server_alias string) (map[st
 	return services
 }
 
-func FileToService() ([]*dataverseInstance, error) {
+func FileToService(path string) ([]*dataverseInstance, error) {
 	// take a file and turn it into dataverseInstances
 	// each file stores a JSON/YAML object for a whitelisted dataverse service
-
-	path := "./whitelist/"
 
 	files, err := ioutil.ReadDir(path)
 
@@ -147,11 +145,9 @@ func FileToService() ([]*dataverseInstance, error) {
 
 }
 
-func ServiceToFile(instance *dataverseInstance) (bool, error) {
+func ServiceToFile(instance *dataverseInstance, path string) (bool, error) {
 	// take a service and store as JSON/YAML object in file
 	// save as a file in path
-
-	path := "./whitelist/"
 
 	err := os.MkdirAll(path, os.ModePerm)
 
