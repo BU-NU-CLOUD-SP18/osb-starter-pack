@@ -1,0 +1,1 @@
+{"ID":"demo-HCPDS","ServiceID":"demo-HCPDS","PlanID":"demo-HCPDS-default","Description":{"name":"HCPDS Dataverse","type":"dataverse","url":"https://demo.dataverse.org/dataverse/HCPDS","identifier":"HCPDS","published_at":"2015-04-20T09:56:52Z","checksum":{"type":"","value":""}},"ServerName":"demo","ServerUrl":"https://demo.dataverse.org","Params":null}
