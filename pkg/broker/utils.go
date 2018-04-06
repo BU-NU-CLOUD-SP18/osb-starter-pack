@@ -9,6 +9,7 @@ import (
 	"strings"
 	"os"
 	"reflect"
+	"path/filepath"
 
 	"github.com/golang/glog"
 
@@ -122,7 +123,7 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 
 	fmt.Printf("%s\n", dir)
 */
-	
+
 	files, err := ioutil.ReadDir(path)
 
 	if err != nil {
@@ -134,7 +135,7 @@ func FileToService(path string) ([]*dataverseInstance, error) {
 
 	for i, f := range files {
 		// read each file
-		text, err := ioutil.ReadFile(path + f.Name())
+		text, err := ioutil.ReadFile(filepath.Join(path,f.Name()))
 
 		if err != nil{
 			return nil, err
@@ -175,7 +176,7 @@ func ServiceToFile(instance *dataverseInstance, path string) (bool, error) {
 
 
 	// write to file
-	err = ioutil.WriteFile(path+instance.ServiceID+".json", jsonInstance, 0777)
+	err = ioutil.WriteFile(filepath.path(path,instance.ServiceID+".json"), jsonInstance, 0777)
 
 	if err != nil {
 		return false, err
