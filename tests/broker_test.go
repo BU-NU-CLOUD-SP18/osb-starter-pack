@@ -4,8 +4,8 @@ package broker
 import(
 	"testing"
 
-	"github.com/pmorie/osb-broker-lib/pkg/broker"
-	osb "github.com/pmorie/go-open-service-broker-client/v2"
+	//"github.com/pmorie/osb-broker-lib/pkg/broker"
+	//osb "github.com/pmorie/go-open-service-broker-client/v2"
 	logic "github.com/SamiSousa/dataverse-broker/pkg/broker"
 )
 
@@ -150,15 +150,17 @@ func TestUtils(t *testing.T) {
 
 	serviceSlice := make([]*dataverseInstance, len(dataverses))
 
-	for i, dataverse := range dataverses {
+	i := 0
+	for _, dataverse := range dataverses {
 		serviceSlice[i] = &dataverseInstance{
-			ID: server_alias + "-" +dataverse.Identifier,
-			ServiceID: server_alias + "-" +dataverse.Identifier,
-			PlanID: server_alias + "-" +dataverse.Identifier + "-default",
+			ID: server_alias + "-" +dataverse.Description.Identifier,
+			ServiceID: server_alias + "-" +dataverse.Description.Identifier,
+			PlanID: server_alias + "-" +dataverse.Description.Identifier + "-default",
 			ServerName: server_alias,
 			ServerUrl: target_dataverse,
-			Description: dataverse,
+			Description: dataverse.Description,
 		}
+		i += 1
 	}
 
 	succ, err := logic.ServiceToFile(serviceSlice)
