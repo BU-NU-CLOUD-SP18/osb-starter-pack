@@ -1,7 +1,6 @@
 package broker
 
 import (
-
 	"net/http"
 
 	"github.com/golang/glog"
@@ -18,7 +17,6 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	// line, you would unpack it from the Options and set it on the
 	// BusinessLogic here.
 
-	// This is not ideal, create an environment variable for this path?
 	dataverseInstances, err := FileToService(o.CatalogPath)
 
 	if err != nil {
@@ -32,9 +30,8 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 	}
 
 	return &BusinessLogic{
-		async:     o.Async,
-		instances: make(map[string]*dataverseInstance, 10),
-		// call dataverse server as little as possible
+		async:      o.Async,
+		instances:  make(map[string]*dataverseInstance, 10),
 		dataverses: dataverseMap,
 	}, nil
 }
@@ -42,7 +39,7 @@ func NewBusinessLogic(o Options) (*BusinessLogic, error) {
 var _ broker.Interface = &BusinessLogic{}
 
 func (b *BusinessLogic) GetCatalog(c *broker.RequestContext) (*broker.CatalogResponse, error) {
-	// Your catalog business logic goes here
+
 	response := &broker.CatalogResponse{}
 
 	// Create Service objects from dataverses
@@ -53,7 +50,7 @@ func (b *BusinessLogic) GetCatalog(c *broker.RequestContext) (*broker.CatalogRes
 	}
 
 	osbResponse := &osb.CatalogResponse{
-		Services : services,
+		Services: services,
 	}
 
 	glog.Infof("catalog response: %#+v", osbResponse)
@@ -63,11 +60,8 @@ func (b *BusinessLogic) GetCatalog(c *broker.RequestContext) (*broker.CatalogRes
 	return response, nil
 }
 
-
 func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.RequestContext) (*broker.ProvisionResponse, error) {
-	// Your provision business logic goes here
 
-	// example implementation:
 	b.Lock()
 	defer b.Unlock()
 
@@ -75,14 +69,23 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 
 	response := broker.ProvisionResponse{}
 
+	if _, present := b.dataverses[request.ServiceID]; present == false {
+		// dataverse not present; ServiceID invalid
+		description := "Invalid Dataverse Service"
+		return nil, osb.HTTPStatusCodeError{
+			StatusCode:  http.StatusConflict,
+			Description: &description,
+		}
+	}
+
 	dataverseInstance := &dataverseInstance{
-		ID:        request.InstanceID,
-		ServiceID: request.ServiceID,
-		PlanID:    request.PlanID,
-		ServerName: b.dataverses[request.ServiceID].ServerName,
-		ServerUrl: b.dataverses[request.ServiceID].ServerUrl,
+		ID:          request.InstanceID,
+		ServiceID:   request.ServiceID,
+		PlanID:      request.PlanID,
+		ServerName:  b.dataverses[request.ServiceID].ServerName,
+		ServerUrl:   b.dataverses[request.ServiceID].ServerUrl,
 		Description: b.dataverses[request.ServiceID].Description,
-		Params:    request.Parameters,
+		Params:      request.Parameters,
 	}
 
 	// Check to see if this is the same instance
@@ -94,30 +97,31 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 			// Instance ID in use, this is a conflict.
 			description := "InstanceID in use"
 			return nil, osb.HTTPStatusCodeError{
-				StatusCode: http.StatusConflict,
+				StatusCode:  http.StatusConflict,
 				Description: &description,
 			}
 		}
 	}
 
-	// this should probably run asynchronously if possible
-	if dataverseInstance.Params["credentials"] != nil && dataverseInstance.Params["credentials"].(string) != "" {
-		// check that the token is valid, make a call to the Dataverse server
-		succ, err := TestDataverseToken(dataverseInstance.ServerUrl, dataverseInstance.Params["credentials"].(string))
+	// Ping the Dataverse server to see if it's live
+	succ, err := PingDataverse(dataverseInstance.Description.Url)
 
-		if err != nil {
-			return nil, err
-		} else if succ != true {
-			description := "Could not reach server"
-			return nil, osb.HTTPStatusCodeError{
-				StatusCode: http.StatusBadRequest,
-				Description: &description,
-			}
-		}
-
+	// This should probably run asynchronously if possible
+	if err == nil && dataverseInstance.Params["credentials"] != nil && dataverseInstance.Params["credentials"].(string) != "" {
+		// Check that the token is valid, make a call to the Dataverse server
+		succ, err = PingDataverseToken(dataverseInstance.ServerUrl, dataverseInstance.Params["credentials"].(string))
 	}
-	
-  
+
+	if err != nil {
+		return nil, err
+	} else if succ != true {
+		description := "Could not reach server"
+		return nil, osb.HTTPStatusCodeError{
+			StatusCode:  http.StatusBadRequest,
+			Description: &description,
+		}
+	}
+
 	b.instances[request.InstanceID] = dataverseInstance
 
 	if request.AcceptsIncomplete {
@@ -130,9 +134,7 @@ func (b *BusinessLogic) Provision(request *osb.ProvisionRequest, c *broker.Reque
 }
 
 func (b *BusinessLogic) Deprovision(request *osb.DeprovisionRequest, c *broker.RequestContext) (*broker.DeprovisionResponse, error) {
-	// Your deprovision business logic goes here
 
-	// example implementation:
 	b.Lock()
 	defer b.Unlock()
 
@@ -154,9 +156,7 @@ func (b *BusinessLogic) LastOperation(request *osb.LastOperationRequest, c *brok
 }
 
 func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext) (*broker.BindResponse, error) {
-	// Your bind business logic goes here
 
-	// example implementation:
 	b.Lock()
 	defer b.Unlock()
 
@@ -171,7 +171,7 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 
 	credentials := ""
 	if instance.Params["credentials"] != nil {
-			credentials = instance.Params["credentials"].(string)
+		credentials = instance.Params["credentials"].(string)
 	}
 
 	response := broker.BindResponse{
@@ -179,9 +179,8 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 			Credentials: map[string]interface{}{
 				"coordinates": instance.Description.Url,
 				"credentials": credentials,
-				},
+			},
 		},
-
 	}
 	if request.AcceptsIncomplete {
 		response.Async = b.async
@@ -193,16 +192,20 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 }
 
 func (b *BusinessLogic) Unbind(request *osb.UnbindRequest, c *broker.RequestContext) (*broker.UnbindResponse, error) {
-	// Your unbind business logic goes here
+
 	return &broker.UnbindResponse{}, nil
 }
 
 func (b *BusinessLogic) Update(request *osb.UpdateInstanceRequest, c *broker.RequestContext) (*broker.UpdateInstanceResponse, error) {
-	// Your logic for updating a service goes here.
+
 	response := broker.UpdateInstanceResponse{}
 	if request.AcceptsIncomplete {
 		response.Async = b.async
 	}
 
 	return &response, nil
+}
+
+func (b *BusinessLogic) ValidateBrokerAPIVersion(version string) error {
+	return nil
 }
