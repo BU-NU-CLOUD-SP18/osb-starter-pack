@@ -36,7 +36,7 @@ deploy-helm: image ## Deploys image with helm
 
 deploy-openshift: image ## Deploys image to openshift
 	oc get project bdc || oc new-project bdc
-	oc process -f openshift/dataverse-broker.yaml -p IMAGE=$(IMAGE):$(TAG) | oc apply -f -
+	openshift/deploy.sh $(IMAGE):$(TAG)
 
 create-ns: ## Cleans up the namespaces
 	kubectl create ns test-ns
