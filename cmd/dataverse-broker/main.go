@@ -13,10 +13,10 @@ import (
 	"github.com/golang/glog"
 	prom "github.com/prometheus/client_golang/prometheus"
 
+	"github.com/dataverse-broker/dataverse-broker/pkg/broker"
 	"github.com/pmorie/osb-broker-lib/pkg/metrics"
 	"github.com/pmorie/osb-broker-lib/pkg/rest"
 	"github.com/pmorie/osb-broker-lib/pkg/server"
-	"github.com/dataverse-broker/dataverse-broker/pkg/broker"
 )
 
 var options struct {
@@ -62,7 +62,7 @@ func runWithContext(ctx context.Context) error {
 
 	addr := ":" + strconv.Itoa(options.Port)
 
-	// set CatalogPath
+	// set CatalogPath; should probably use environment variables
 	options.Options.CatalogPath = "/opt/dataverse-broker/whitelist/"
 
 	businessLogic, err := broker.NewBusinessLogic(options.Options)
