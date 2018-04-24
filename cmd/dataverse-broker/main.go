@@ -17,10 +17,10 @@ import (
 	clientrest "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
+	"github.com/dataverse-broker/dataverse-broker/pkg/broker"
 	"github.com/pmorie/osb-broker-lib/pkg/metrics"
 	"github.com/pmorie/osb-broker-lib/pkg/rest"
 	"github.com/pmorie/osb-broker-lib/pkg/server"
-	"github.com/dataverse-broker/dataverse-broker/pkg/broker"
 )
 
 var options struct {
@@ -76,7 +76,7 @@ func runWithContext(ctx context.Context) error {
 
 	addr := ":" + strconv.Itoa(options.Port)
 
-	// set CatalogPath, which's not in Shawn's code
+	// set CatalogPath to location of whitelist
 	options.Options.CatalogPath = "/opt/dataverse-broker/whitelist/"
 
 	businessLogic, err := broker.NewBusinessLogic(options.Options)
@@ -96,35 +96,35 @@ func runWithContext(ctx context.Context) error {
 
 	s := server.New(api, reg)
 	if options.AuthenticateK8SToken {
-	// get k8s client
-	k8sClient, err := getKubernetesClient(options.KubeConfig)
-	if err != nil {
-		return err
+		// get k8s client
+		k8sClient, err := getKubernetesClient(options.KubeConfig)
+		if err != nil {
+			return err
+		}
+		// create TokenReviewMiddleware
+		tr := middleware.TokenReviewMiddleware{
+			TokenReview: k8sClient.Authentication().TokenReviews(),
+		}
+		// Use TokenReviewMiddleware.
+		s.Router.Use(tr.Middleware)
 	}
-	// create TokenReviewMiddleware
-	tr := middleware.TokenReviewMiddleware{
-		TokenReview: k8sClient.Authentication().TokenReviews(),
-	}
-	// Use TokenReviewMiddleware.
-	s.Router.Use(tr.Middleware)
-}
 
 	glog.Infof("Starting broker!")
 
 	if options.Insecure {
 		err = s.Run(ctx, addr)
 	} else {
-			if options.TLSCert != "" && options.TLSKey != "" {
-		glog.V(4).Infof("Starting secure broker with TLS cert and key data")
-		err = s.RunTLS(ctx, addr, options.TLSCert, options.TLSKey)
-	} else {
-		if options.TLSCertFile == "" || options.TLSKeyFile == "" {
-			glog.Error("unable to run securely without TLS Certificate and Key. Please review options and if running with TLS, specify --tls-cert-file and --tls-private-key-file or --tlsCert and --tlsKey.")
-			return nil
+		if options.TLSCert != "" && options.TLSKey != "" {
+			glog.V(4).Infof("Starting secure broker with TLS cert and key data")
+			err = s.RunTLS(ctx, addr, options.TLSCert, options.TLSKey)
+		} else {
+			if options.TLSCertFile == "" || options.TLSKeyFile == "" {
+				glog.Error("unable to run securely without TLS Certificate and Key. Please review options and if running with TLS, specify --tls-cert-file and --tls-private-key-file or --tlsCert and --tlsKey.")
+				return nil
+			}
+			glog.V(4).Infof("Starting secure broker with file based TLS cert and key")
+			err = s.RunTLSWithTLSFiles(ctx, addr, options.TLSCertFile, options.TLSKeyFile)
 		}
-		glog.V(4).Infof("Starting secure broker with file based TLS cert and key")
-		err = s.RunTLSWithTLSFiles(ctx, addr, options.TLSCertFile, options.TLSKeyFile)
-	}
 	}
 	return err
 }

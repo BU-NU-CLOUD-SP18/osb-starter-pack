@@ -7,14 +7,14 @@ objects:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: dataverse-broker-client #???
+    name: dataverse-broker-client
 
 - kind: Secret
   apiVersion: v1
   metadata:
     name: dataverse-broker
     annotations:
-      kubernetes.io/service-account.name: dataverse-broker-client #???
+      kubernetes.io/service-account.name: dataverse-broker-client
   type: kubernetes.io/service-account-token
 
 - apiVersion: servicecatalog.k8s.io/v1beta1
@@ -22,8 +22,8 @@ objects:
   metadata:
     name: dataverse-broker
   spec:
-    url: http://dataverse-broker.bdc.svc.cluster.local
-    caBundle: ${BROKER_CA_CERT} #should I remove this if we don't support https?
+    url: https://dataverse-broker.${NAMESPACE}.svc.cluster.local
+    caBundle: ${BROKER_CA_CERT}
     authInfo:
       bearer:
         secretRef:
@@ -61,7 +61,7 @@ objects:
   metadata:
     name: dataverse-broker
     annotations:
-    service.alpha.openshift.io/serving-cert-secret-name: 'dataverse-broker-ssl' #dataverse-broker-ssl? where is it?
+      service.alpha.openshift.io/serving-cert-secret-name: 'dataverse-broker-ssl'
     labels:
       app: dataverse-broker
   spec:
@@ -101,9 +101,9 @@ objects:
           - "4"
           - --logtostderr
           - --tls-cert-file
-          - "/var/run/dataverse-broker/dataversebroker.crt" #???
+          - "/var/run/dataverse-broker/dataversebroker.crt"
           - --tls-private-key-file
-          - "/var/run/dataverse-broker/dataversebroker.key" #???
+          - "/var/run/dataverse-broker/dataversebroker.key"
           - --authenticate-k8s-token
           ports:
           - containerPort: 8443
@@ -125,13 +125,13 @@ objects:
             timeoutSeconds: 2
           volumeMounts:
           - mountPath: /var/run/dataverse-broker
-            name: dataverse-broker-ssl #？？？
+            name: dataverse-broker-ssl
             readOnly: true
         volumes:
-        - name: dataverse-broker-ssl #???
+        - name: dataverse-broker-ssl
           secret:
             defaultMode: 420
-            secretName: dataverse-broker-ssl #???
+            secretName: dataverse-broker-ssl
             items:
             - key: tls.crt
               path: dataversebroker.crt
@@ -151,7 +151,7 @@ parameters:
   required: true
   value:
 
-- description: Namespace that the starter pack is deployed to
+- description: Namespace that the dataverse-broker is deployed to
   displayName: Namespace
   name: NAMESPACE
-  value: dataverse-broker
+  value: bdc

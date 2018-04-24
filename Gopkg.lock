@@ -8,12 +8,6 @@
   revision = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/dataverse-broker/dataverse-broker"
-  packages = ["pkg/broker"]
-  revision = "0f82bcff58d861df26252ce6939a8986031a76cb"
-
-[[projects]]
   name = "github.com/ghodss/yaml"
   packages = ["."]
   revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
