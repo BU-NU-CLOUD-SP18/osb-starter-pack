@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
-  revision = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
+  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
 
 [[projects]]
   name = "github.com/ghodss/yaml"
@@ -113,8 +113,8 @@
 [[projects]]
   name = "github.com/pmorie/go-open-service-broker-client"
   packages = ["v2"]
-  revision = "87e2f174c3a1d416379eaa0cfe29f6fa0668e780"
-  version = "0.0.9"
+  revision = "dca737037ce636eb282e84e3a1c7479c9692e884"
+  version = "0.0.10"
 
 [[projects]]
   name = "github.com/pmorie/osb-broker-lib"
@@ -124,8 +124,8 @@
     "pkg/rest",
     "pkg/server"
   ]
-  revision = "052cd99aa13d67fd2c99ff853027a359f25dfbe7"
-  version = "0.0.9"
+  revision = "f4ca270ef323318b363f986229bd10bccb2d28b1"
+  version = "0.0.10"
 
 [[projects]]
   name = "github.com/prometheus/client_golang"
@@ -150,7 +150,7 @@
     "internal/bitbucket.org/ww/goautoneg",
     "model"
   ]
-  revision = "89604d197083d4781071d3c65855d24ecfb0a563"
+  revision = "e5b036cc37a466a0af27d604d1ee500211d16d6a"
 
 [[projects]]
   branch = "master"
@@ -161,7 +161,7 @@
     "nfs",
     "xfs"
   ]
-  revision = "282c8707aa210456a825798969cc27edda34992a"
+  revision = "8b1c2da0d56deffdbb9e48d4414b4e674bd8083e"
 
 [[projects]]
   name = "github.com/shawn-hurley/osb-broker-k8s-lib"
@@ -179,7 +179,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "e73bf333ef8920dbb52ad18d4bd38ad9d9bc76d7"
+  revision = "2b6c08872f4b66da917bb4ce98df4f0307330f78"
 
 [[projects]]
   branch = "master"
@@ -239,8 +239,8 @@
 [[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "7f97868eec74b32b0982dd158a51a446d1da7eb5"
-  version = "v2.1.1"
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
+  version = "v2.2.1"
 
 [[projects]]
   branch = "master"
@@ -275,7 +275,7 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "1c973d529bdf4c4f349357ca665fb8e1d13e2d0d"
+  revision = "6ef9db38b7d4d02a221e7af3e7f508ff19706fc6"
 
 [[projects]]
   branch = "master"
@@ -317,7 +317,7 @@
     "pkg/watch",
     "third_party/forked/golang/reflect"
   ]
-  revision = "73aa818bbacf185a03468ddc170fb275763dec3d"
+  revision = "f9ee2bbdc5f71288510bc540f02b2a2d7b1bbbe2"
 
 [[projects]]
   name = "k8s.io/client-go"
@@ -378,6 +378,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "944a7e1f5e68beae2db90e30d55d490c989fbee7bec716243a675545d067ca4d"
+  inputs-digest = "67a64b7c722dab52bdfd29ebafb4160e167912c196af7221ffeef98d2f5ade79"
   solver-name = "gps-cdcl"
   solver-version = 1
