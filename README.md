@@ -89,6 +89,10 @@ Provides a description of the corresponding dataverse subtree, including plans, 
 
 Configure service to be provisioned/binded. Along with prompts to create a new project, you will be prompted to enter your API-token for this subtree (optional). The broker will check that your token has the necessary credentials to access that dataverse. During the Results tab, the provision step will fail if a provided token is invalid.
 
+### Usage of whitelist
+
+In order for a dataverse to be offered as a service, we need a bit of info regarding the specific dataverse in the form of metadata which is injected into an image (`json` object located in the whitelist folder residing in the image folder) which dataverse broker eventually calls upon in the event of a service binding. In the dataverse-broker/pkg/broker/utils.go file there are 2 functions of which get the metadata for a dataverse ( DataverseMetadataIds, and DataverseMeta ) which if you run the DataverseMetadataIds it will obtain the metadata for the dataverse. From there you use this output and create a `json` object similar to that of the current `json` objects in the whitelist folder, and you inject it with the output from the function. The "service_id" and "plan_id" fields are just UUIDs that can be generated online, unique for each service/plan, which is also injected into the `json` object for the dataverse.
+
 #### Service Binding
 
 ![Binding](/screenshots/Binding.png?raw=true "Binding tab of a Dataverse Service")
