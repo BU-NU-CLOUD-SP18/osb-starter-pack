@@ -1,0 +1,257 @@
+[
+    {
+        "id": "demo-cayley",
+        "service_id": "4495cd42-28f8-43c8-8a93-29d9c77e7524",
+        "plan_id": "1caafb05-8b94-4e60-a709-da1f5919b571",
+        "description": {
+            "name": "Cayley Graphs Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/cayley",
+            "identifier": "cayley",
+            "description": "Cayley graphs encode the abstract structure of a group.",
+            "published_at": "2015-04-20T13:53:19Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-cosgak",
+        "service_id": "cd8fa614-0904-45d7-8c63-e900d67bf924",
+        "plan_id": "72f8b1c5-7a7e-4166-a578-4bd18db36423",
+        "description": {
+            "name": "COSgak Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/cosgak",
+            "identifier": "cosgak",
+            "description": "This is to test the OSF with the new Dataverse 4.0",
+            "published_at": "2015-04-20T13:43:30Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-dliburd",
+        "service_id": "925a1cb9-35c7-4b19-a782-f7345b87e490",
+        "plan_id": "7645afdd-8e4f-4bcd-b5b6-84b0d60c7cb7",
+        "description": {
+            "name": "Dwayne Liburd Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/dliburd",
+            "identifier": "dliburd",
+            "description": "Dwayne Liburd's Dataverse",
+            "published_at": "2015-04-20T10:31:42Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-ecastro",
+        "service_id": "c2175470-cbea-49af-93b8-b1556cec8afa",
+        "plan_id": "821e55bd-0daa-46a6-815d-72ebf290e760",
+        "description": {
+            "name": "Eleni Castro Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/ecastro",
+            "identifier": "ecastro",
+            "description": "This is my Dataverse.",
+            "published_at": "2015-04-20T09:56:32Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-hbstest",
+        "service_id": "dc9274b9-167e-4093-8dc0-9828eb6f484f",
+        "plan_id": "04a96083-87d2-48a4-8291-18b58b49bfd8",
+        "description": {
+            "name": "HBS Test Dataverse Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/hbstest",
+            "identifier": "hbstest",
+            "description": "This is a test dataverse (can add HTML here to add images",
+            "published_at": "2015-04-20T09:56:36Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-HCPDS",
+        "service_id": "c84eb3b1-d80f-49b8-9723-8212b3024293",
+        "plan_id": "11405b6d-23c1-4ebb-be96-396155a37644",
+        "description": {
+            "name": "HCPDS Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/HCPDS",
+            "identifier": "HCPDS",
+            "published_at": "2015-04-20T09:56:52Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-mramsey",
+        "service_id": "b08d04ca-8087-43d6-9b6a-25ae5d18363e",
+        "plan_id": "36c51fc8-ec7d-4289-bb76-f018dc659519",
+        "description": {
+            "name": "Mack Ramsey Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/mramsey",
+            "identifier": "mramsey",
+            "description": "Test dataverse for training purposes.",
+            "published_at": "2015-04-20T10:14:18Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-splash",
+        "service_id": "281b2fca-41ef-4b06-9075-ec80b1f657d6",
+        "plan_id": "bd19642d-bd77-4e98-b524-24a57d002da7",
+        "description": {
+            "name": "Splish Splash Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/splash",
+            "identifier": "splash",
+            "published_at": "2015-04-20T14:40:11Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "demo-test",
+        "service_id": "c241d773-97a1-4d5a-9d7c-c3bea965d601",
+        "plan_id": "060c93ba-3bab-4ae0-94ab-81128e946d6c",
+        "description": {
+            "name": "Investigation of Test Dataverse",
+            "type": "dataverse",
+            "url": "https://demo.dataverse.org/dataverse/test",
+            "identifier": "test",
+            "description": "test investigation",
+            "published_at": "2015-04-20T14:11:51Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "demo",
+        "server_url": "https://demo.dataverse.org",
+        "params": null
+    },
+    {
+        "id": "harvard-culturalanalytics",
+        "service_id": "85bff402-af02-4630-badc-4610c5eb2742",
+        "plan_id": "89546f89-c320-4589-89a7-05df098ff7af",
+        "description": {
+            "name": "Cultural Analytics Dataverse",
+            "type": "dataverse",
+            "url": "https://dataverse.harvard.edu/dataverse/culturalanalytics",
+            "identifier": "culturalanalytics",
+            "published_at": "2016-06-03T18:42:30Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "harvard",
+        "server_url": "https://dataverse.harvard.edu",
+        "params": null
+    },
+    {
+        "id": "harvard-PSI",
+        "service_id": "2ff8540e-0959-40d3-85e7-9ddc59ca9dcb",
+        "plan_id": "3335b4f9-5f1e-4e5b-8c9b-7bde92621c5c",
+        "description": {
+            "name": "Population Services International (PSI) Dataverse",
+            "type": "dataverse",
+            "url": "https://dataverse.harvard.edu/dataverse/PSI",
+            "identifier": "PSI",
+            "description": "PSI is a global health organization dedicated to improving the health of people in the developing world by focusing on serious challenges like a lack of family planning, HIV and AIDS, barriers to maternal health, and the greatest threats to children under five, including malaria, diarrhea, pneumonia and malnutrition. A hallmark of PSI is a commitment to the principle that health services and products are most effective when they are accompanied by robust communications and distribution efforts that help ensure wide acceptance and proper use. PSI works in partnership with local governments, ministries of health and local organizations to create health solutions that are built to last.",
+            "published_at": "2013-08-20T18:55:24Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "harvard",
+        "server_url": "https://dataverse.harvard.edu",
+        "params": null
+    },
+    {
+        "id": "harvard-sobek",
+        "service_id": "c11d165e-2ded-414b-a62c-1e5e7dd64a0b",
+        "plan_id": "206f5cab-c043-4b9b-89b7-df363c4e46de",
+        "description": {
+            "name": "David Sobek Dataverse",
+            "type": "dataverse",
+            "url": "https://dataverse.harvard.edu/dataverse/sobek",
+            "identifier": "sobek",
+            "published_at": "2007-08-16T04:00:00Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "harvard",
+        "server_url": "https://dataverse.harvard.edu",
+        "params": null
+    },
+    {
+        "id": "MOC",
+        "service_id": "0b4a80c8-410e-11e8-842f-0ed5f89f718b",
+        "plan_id": "0b4a8352-410e-11e8-842f-0ed5f89f718b",
+        "description": {
+            "name": "Massachusetts Open Cloud - Cloud Dataverse",
+            "type": "dataverse",
+            "url": "https://dataverse.massopen.cloud/dataverse/MOC",
+            "identifier": "MOC",
+            "published_at": "2017-07-20T18:46:36Z",
+            "checksum": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "server_name": "MOC",
+        "server_url": "https://dataverse.massopen.cloud/",
+        "params": null
+    }
+]

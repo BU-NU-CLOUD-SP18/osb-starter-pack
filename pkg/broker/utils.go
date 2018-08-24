@@ -13,8 +13,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/golang/glog"
 	"reflect"
+
+	"github.com/golang/glog"
 
 	osb "github.com/pmorie/go-open-service-broker-client/v2"
 )
@@ -228,38 +229,20 @@ func GetDataverseInstances(target_dataverse string, server_alias string) map[str
 }
 
 func FileToService(path string) ([]*dataverseInstance, error) {
-	// Take all json files at path and turn it into dataverseInstances
-	// Each file stores a JSON object for a whitelisted dataverse service
+	// Read from dataverses.json and make each of them available on OpenShift
 
-	files, err := ioutil.ReadDir(path)
-
+	var jsonPath string
+	jsonPath = path + "/dataverses.json"
+	jsonFile, err := os.Open(jsonPath)
 	if err != nil {
 		glog.Error(err)
 		return nil, err
 	}
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	instances := make([]*dataverseInstance, len(files))
-
-	for i, f := range files {
-		// Read each file
-		text, err := ioutil.ReadFile(filepath.Join(path, f.Name()))
-
-		if err != nil {
-			return nil, err
-		}
-
-		// Unmarshal string into dataverseInstance object
-		dataverse := &dataverseInstance{}
-		err = json.Unmarshal(text, dataverse)
-
-		if err != nil {
-			return nil, err
-		}
-
-		instances[i] = dataverse
-
-	}
-
+	var instances []*dataverseInstance
+	json.Unmarshal(byteValue, &instances)
+	defer jsonFile.Close()
 	return instances, nil
 
 }
