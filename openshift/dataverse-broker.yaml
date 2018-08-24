@@ -86,6 +86,9 @@ objects:
       metadata:
         labels:
           app: dataverse-broker
+      volumes:
+      - name: config-volume
+        configMap: dataverse-list
       spec:
         serviceAccount: dataverse-broker
         containers:
@@ -94,6 +97,9 @@ objects:
           imagePullPolicy: IfNotPresent
           command:
           - /opt/dataverse-broker/dataverse-broker
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
           args:
           - --port
           - "8443"
