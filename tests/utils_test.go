@@ -11,7 +11,7 @@ func TestServiceToFile(t *testing.T) {
 	server_alias := "demo"
 	target_dataverse := "https://demo.dataverse.org"
 
-	whitelistPath := "./test/"
+	whitelistPath := "../image/whitelist"
 
 	// Gets some dataverse info from the demo dataverse
 	dataverses := logic.GetDataverseInstances(target_dataverse, server_alias)
